@@ -1,6 +1,5 @@
 package com.example.ContactList.repository;
 
-import com.example.ContactList.ContactRowMapper;
 import com.example.ContactList.model.Contact;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -44,5 +43,17 @@ public class ContactRepository {
     public void delete(Long id) {
         String sql = "DELETE FROM contacts WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+    private static class ContactRowMapper implements RowMapper<Contact> {
+        @Override
+        public Contact mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Contact contact = new Contact();
+            contact.setId(rs.getLong("id"));
+            contact.setFirstName(rs.getString("firstName"));
+            contact.setLastName(rs.getString("lastName"));
+            contact.setEmail(rs.getString("email"));
+            contact.setPhone(rs.getString("phone"));
+            return contact;
+        }
     }
 }
